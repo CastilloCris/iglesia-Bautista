@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Iglesia Bautista Beth-El. Buscamos una relación con Dios basada en la oración, la Biblia y la comunidad.">
+    <meta name="keywords" content="iglesia bautista, iglesia cristiana, Beth-El, comunidad cristiana">
+    <meta name="author" content="Iglesia Bautista Beth-El">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="img/cruz.ico" type="image/x-icon">
+
+    <title>Contacto | Iglesia Bautista Beth-El</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="container header-content">
+        <div class="logo-area">
+            <img src="img/cruz.png" alt="Logo Iglesia Bautista Beth-El">
+            <span>Iglesia Bautista Beth-El</span>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle">
+            ☰
+        </button>
+
+        <nav class="nav" id="navMenu">
+            <a href="index.html">Inicio</a>
+            <a href="quienes-somos.html">Quiénes Somos</a>
+            <a href="reuniones.html">Reuniones</a>
+            <a href="ministerios.html">Ministerios</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </div>
+</header>
+
+
+<section class="page-hero">
+    <h2>Contacto</h2>
+</section>
+
+<section class="container contact">
+    <form class="contact-form" onsubmit="enviarWhatsApp(event)">
+        <label>Nombre</label>
+        <input type="text" required>
+
+        <label>Email</label>
+        <input type="email" required>
+
+        <label>Mensaje</label>
+        <textarea rows="5" required></textarea>
+
+        <button type="submit" class="btn">Enviar mensaje</button>
+    </form>
+</section>
+
+<footer class="footer">
+    <p>© 2026 Iglesia Bautista Beth-El</p>
+</footer>
+<script src="js/main.js"></script>
+
+</body>
+</html>
