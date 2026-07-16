@@ -3,6 +3,9 @@ import { supabase } from '../lib/supabase.js'
 import { BLOG_TABLE } from '../lib/blog.js'
 import BlogCard from '../components/BlogCard.jsx'
 
+const statusCard = 'rounded-xl border border-accent/40 bg-white p-8 text-center text-muted shadow-sm'
+const errorCard  = 'rounded-xl border border-red-300/50 bg-white p-8 text-center text-red-500 shadow-sm'
+
 export default function Blog() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -33,25 +36,28 @@ export default function Blog() {
       <section className="page-hero">
         <h1 className="page-title">Blog</h1>
       </section>
-      <section className="container-page section-pad">
-        {loading && <div className="rounded-lg border-2 border-beth-gold/30 bg-beth-night p-8 text-center text-gray-300 shadow-sm" style={{boxShadow: '0 2px 12px rgba(212, 175, 55, 0.2)'}}>Cargando entradas...</div>}
 
-        {!loading && error && (
-          <div className="rounded-lg border-2 border-red-600/30 bg-beth-night p-8 text-center text-red-400 shadow-sm" style={{boxShadow: '0 2px 12px rgba(220, 38, 38, 0.2)'}}>No se pudieron cargar las entradas: {error}</div>
-        )}
+      <div className="min-h-screen bg-secondary">
+        <section className="container-page section-pad">
+          {loading && <div className={statusCard}>Cargando entradas...</div>}
 
-        {!loading && !error && posts.length === 0 && (
-          <div className="rounded-lg border-2 border-beth-gold/30 bg-beth-night p-8 text-center text-gray-300 shadow-sm" style={{boxShadow: '0 2px 12px rgba(212, 175, 55, 0.2)'}}>Todíaa no hay entradas publicadas.</div>
-        )}
+          {!loading && error && (
+            <div className={errorCard}>No se pudieron cargar las entradas: {error}</div>
+          )}
 
-        {!loading && !error && posts.length > 0 && (
-          <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <BlogCard key={post.id} post={post} />
-            ))}
-          </div>
-        )}
-      </section>
+          {!loading && !error && posts.length === 0 && (
+            <div className={statusCard}>Todavía no hay entradas publicadas.</div>
+          )}
+
+          {!loading && !error && posts.length > 0 && (
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
     </>
   )
 }

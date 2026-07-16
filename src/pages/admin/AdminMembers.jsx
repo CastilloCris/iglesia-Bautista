@@ -11,6 +11,8 @@ const emptyForm = {
   dni: '',
   telefono: '',
   fecha_nacimiento: '',
+  localidad: '',
+  fecha_bautismo: '',
   activo: true,
 }
 
@@ -19,11 +21,17 @@ function formatDate(value) {
   return new Intl.DateTimeFormat('es-AR', { timeZone: 'UTC' }).format(new Date(value))
 }
 
+const formatFecha = (fecha) =>
+  fecha ? new Date(fecha + 'T00:00:00').toLocaleDateString('es-AR') : '—';
+
 export default function AdminMembers() {
   const [members, setMembers] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [search, setSearch] = useState('')
+  const [busqueda, setBusqueda] = useState('')
+  const [localidad, setLocalidad] = useState('')
+  const [estado, setEstado] = useState('activo') // por defecto solo activos
+  const [bautismo, setBautismo] = useState('')
   const [page, setPage] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingMember, setEditingMember] = useState(null)
@@ -37,7 +45,7 @@ export default function AdminMembers() {
 
   useEffect(() => {
     setPage(1)
-  }, [search])
+  }, [busqueda, localidad, estado, bautismo])
 
   useEffect(() => {
     if (!toast) return undefined
@@ -78,6 +86,8 @@ export default function AdminMembers() {
       dni: member.dni ?? '',
       telefono: member.telefono ?? '',
       fecha_nacimiento: member.fecha_nacimiento ?? '',
+      localidad: member.localidad ?? '',
+      fecha_bautismo: member.fecha_bautismo ?? '',
       activo: member.activo ?? true,
     })
     setFormError('')
@@ -135,6 +145,8 @@ export default function AdminMembers() {
       dni: form.dni.trim(),
       telefono: form.telefono.trim() || null,
       fecha_nacimiento: form.fecha_nacimiento || null,
+      localidad: form.localidad.trim() || null,
+      fecha_bautismo: form.fecha_bautismo || null,
       activo: Boolean(form.activo),
     }
 
@@ -176,7 +188,9 @@ export default function AdminMembers() {
       'Nombre': member.nombre || '',
       'DNI': member.dni || '',
       'Teléfono': member.telefono || '',
+      'Localidad': member.localidad || '—',
       'Fecha de Nacimiento': formatDate(member.fecha_nacimiento),
+      'Fecha de Bautismo': formatFecha(member.fecha_bautismo),
       'Estado': member.activo ? 'Activo' : 'Inactivo',
     }))
 
@@ -186,6 +200,8 @@ export default function AdminMembers() {
       { wch: 15 },
       { wch: 12 },
       { wch: 15 },
+      { wch: 18 },
+      { wch: 18 },
       { wch: 18 },
       { wch: 10 },
     ]
@@ -217,12 +233,14 @@ export default function AdminMembers() {
     yPosition += 10
 
     // Tabla
-    const columns = ['Apellido y Nombre', 'DNI', 'Teléfono', 'Fecha Nac.', 'Estado']
+    const columns = ['Apellido y Nombre', 'DNI', 'Teléfono', 'Localidad', 'Fecha Nac.', 'F. Bautismo', 'Estado']
     const rows = filteredMembers.map((member) => [
       `${member.apellido}, ${member.nombre}`,
       member.dni || '',
       member.telefono || '',
+      member.localidad || '—',
       formatDate(member.fecha_nacimiento),
+      formatFecha(member.fecha_bautismo),
       member.activo ? 'Activo' : 'Inactivo',
     ])
 
@@ -271,17 +289,36 @@ export default function AdminMembers() {
     showToast('success', 'Archivo PDF descargado exitosamente.')
   }
 
-  const filteredMembers = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    if (!term) return members
+  const localidades = useMemo(() => {
+    return [...new Set(members
+      .map(m => m.localidad)
+      .filter(Boolean)
+    )].sort();
+  }, [members]);
 
-    return members.filter((member) => {
-      const fullName = `${member.apellido ?? ''} ${member.nombre ?? ''}`.toLowerCase()
-      const reverseName = `${member.nombre ?? ''} ${member.apellido ?? ''}`.toLowerCase()
-      const dni = String(member.dni ?? '').toLowerCase()
-      return fullName.includes(term) || reverseName.includes(term) || dni.includes(term)
-    })
-  }, [members, search])
+  const filteredMembers = useMemo(() => {
+    return members.filter(m => {
+      const q = busqueda.toLowerCase();
+      const coincideTexto = q === '' ||
+        m.apellido?.toLowerCase().includes(q) ||
+        m.nombre?.toLowerCase().includes(q) ||
+        m.dni?.includes(q);
+
+      const coincideLocalidad = localidad === '' || m.localidad === localidad;
+
+      const coincideEstado =
+        estado === '' ? true :
+        estado === 'activo' ? m.activo === true :
+        m.activo === false;
+
+      const coincideBautismo =
+        bautismo === '' ? true :
+        bautismo === 'si' ? m.fecha_bautismo !== null :
+        m.fecha_bautismo === null;
+
+      return coincideTexto && coincideLocalidad && coincideEstado && coincideBautismo;
+    });
+  }, [members, busqueda, localidad, estado, bautismo]);
 
   const totalPages = Math.max(1, Math.ceil(filteredMembers.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
@@ -292,8 +329,8 @@ export default function AdminMembers() {
       <div className="surface">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-beth-gold">Miembros</h2>
-            <p className="mt-2 text-beth-ivory/70">Alta, modificación, búsqueda y baja lógica de miembros.</p>
+            <h2 className="text-2xl font-bold text-primary">Miembros</h2>
+            <p className="mt-2 text-muted">Alta, modificación, búsqueda y baja lógica de miembros.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <button type="button" className="btn btn-outline" onClick={downloadExcel}>
@@ -308,35 +345,115 @@ export default function AdminMembers() {
           </div>
         </div>
 
-        <div className="mt-8">
-          <label className="block text-sm font-bold text-beth-gold" htmlFor="member-search">
-            Buscar por nombre, apellido o DNI
-          </label>
-          <input
-            id="member-search"
-            className="form-input mt-2 max-w-xl"
-            placeholder="Ej: González, María o 30111222"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
+        {/* Barra de Filtros */}
+        <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-end">
+          {/* Filtro 1: Búsqueda */}
+          <div className="flex-1 min-w-[200px]">
+            <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1" htmlFor="filtro-busqueda">
+              Buscar
+            </label>
+            <input
+              id="filtro-busqueda"
+              type="text"
+              className="w-full border border-accent/40 rounded-lg px-3 py-2 text-sm focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none bg-white text-carbon"
+              placeholder="Buscar por nombre, apellido o DNI..."
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+            />
+          </div>
+
+          {/* Filtro 2: Localidad */}
+          <div className="w-full md:w-48">
+            <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1" htmlFor="filtro-localidad">
+              Localidad
+            </label>
+            <select
+              id="filtro-localidad"
+              className="w-full border border-accent/40 rounded-lg px-3 py-2 text-sm focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none bg-white text-carbon"
+              value={localidad}
+              onChange={(e) => setLocalidad(e.target.value)}
+            >
+              <option value="">Todas las localidades</option>
+              {localidades.map((loc) => (
+                <option key={loc} value={loc}>
+                  {loc}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filtro 3: Estado */}
+          <div className="w-full md:w-40">
+            <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1" htmlFor="filtro-estado">
+              Estado
+            </label>
+            <select
+              id="filtro-estado"
+              className="w-full border border-accent/40 rounded-lg px-3 py-2 text-sm focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none bg-white text-carbon"
+              value={estado}
+              onChange={(e) => setEstado(e.target.value)}
+            >
+              <option value="">Todos</option>
+              <option value="activo">Activos</option>
+              <option value="inactivo">Inactivos</option>
+            </select>
+          </div>
+
+          {/* Filtro 4: Bautizado */}
+          <div className="w-full md:w-48">
+            <label className="block text-xs font-bold uppercase tracking-wider text-primary mb-1" htmlFor="filtro-bautismo">
+              Bautizado
+            </label>
+            <select
+              id="filtro-bautismo"
+              className="w-full border border-accent/40 rounded-lg px-3 py-2 text-sm focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none bg-white text-carbon"
+              value={bautismo}
+              onChange={(e) => setBautismo(e.target.value)}
+            >
+              <option value="">Todos</option>
+              <option value="si">Bautizados</option>
+              <option value="no">Sin fecha de bautismo</option>
+            </select>
+          </div>
+
+          {/* Botón Limpiar */}
+          <div className="flex items-center h-10">
+            <button
+              type="button"
+              onClick={() => {
+                setBusqueda('');
+                setLocalidad('');
+                setEstado('activo');
+                setBautismo('');
+              }}
+              className="text-xs text-muted hover:text-primary underline transition"
+            >
+              Limpiar filtros
+            </button>
+          </div>
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-lg border border-white/10">
+        {/* Contador debajo de los filtros */}
+        <div className="mt-2 text-xs text-muted mb-4">
+          {filteredMembers.length} miembro(s) encontrado(s)
+        </div>
+
+        <div className="mt-8 overflow-hidden rounded-lg border border-accent/20">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/10">
-              <thead className="bg-beth-night">
+            <table className="min-w-full divide-y divide-accent/20">
+              <thead className="bg-secondary">
                 <tr>
-                  {['Apellido y Nombre', 'DNI', 'Teléfono', 'Fecha de Nacimiento', 'Estado', 'Acciones'].map((header) => (
-                    <th key={header} scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-beth-gold">
+                  {['Apellido y Nombre', 'DNI', 'Teléfono', 'Localidad', 'Fecha Nac.', 'F. Bautismo', 'Estado', 'Acciones'].map((header) => (
+                    <th key={header} scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-primary">
                       {header}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10 bg-white/[0.03]">
+              <tbody className="divide-y divide-accent/20 bg-white">
                 {loading && (
                   <tr>
-                    <td colSpan="6" className="px-4 py-8 text-center text-beth-ivory/70">
+                    <td colSpan="8" className="px-4 py-8 text-center text-muted">
                       Cargando miembros...
                     </td>
                   </tr>
@@ -344,7 +461,7 @@ export default function AdminMembers() {
 
                 {!loading && paginatedMembers.length === 0 && (
                   <tr>
-                    <td colSpan="6" className="px-4 py-8 text-center text-beth-ivory/70">
+                    <td colSpan="8" className="px-4 py-8 text-center text-muted">
                       No se encontraron miembros.
                     </td>
                   </tr>
@@ -352,18 +469,20 @@ export default function AdminMembers() {
 
                 {!loading &&
                   paginatedMembers.map((member) => (
-                    <tr key={member.id} className="transition hover:bg-white/[0.06]">
-                      <td className="whitespace-nowrap px-4 py-4 font-semibold text-beth-ivory">
+                    <tr key={member.id} className="transition hover:bg-secondary/50">
+                      <td className="whitespace-nowrap px-4 py-4 font-semibold text-carbon">
                         {member.apellido}, {member.nombre}
                       </td>
-                      <td className="whitespace-nowrap px-4 py-4 text-beth-ivory/75">{member.dni}</td>
-                      <td className="whitespace-nowrap px-4 py-4 text-beth-ivory/75">{member.telefono || '-'}</td>
-                      <td className="whitespace-nowrap px-4 py-4 text-beth-ivory/75">{formatDate(member.fecha_nacimiento)}</td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted">{member.dni}</td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted">{member.telefono || '-'}</td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted">{member.localidad || '—'}</td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted">{formatDate(member.fecha_nacimiento)}</td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted">{formatFecha(member.fecha_bautismo)}</td>
                       <td className="whitespace-nowrap px-4 py-4">
                         <span
                           className={[
                             'inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide',
-                            member.activo ? 'bg-emerald-400/15 text-emerald-200' : 'bg-red-400/15 text-red-200',
+                            member.activo ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700',
                           ].join(' ')}
                         >
                           {member.activo ? 'Activo' : 'Inactivo'}
@@ -376,7 +495,7 @@ export default function AdminMembers() {
                           </button>
                           <button
                             type="button"
-                            className="inline-flex items-center justify-center rounded-full border border-red-300/40 px-4 py-2 text-xs font-bold uppercase tracking-wide text-red-100 transition hover:bg-red-500/15"
+                            className="inline-flex items-center justify-center rounded-full border border-red-200 px-4 py-2 text-xs font-bold uppercase tracking-wide text-red-600 transition hover:bg-red-50"
                             onClick={() => handleLogicalDelete(member)}
                           >
                             Baja
@@ -390,7 +509,7 @@ export default function AdminMembers() {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-sm text-beth-ivory/70">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-sm text-muted">
           <span>
             Mostrando {paginatedMembers.length} de {filteredMembers.length} registros
           </span>
@@ -403,7 +522,7 @@ export default function AdminMembers() {
             >
               Anterior
             </button>
-            <span className="rounded-md border border-white/10 bg-beth-night px-3 py-2 text-beth-ivory">
+            <span className="rounded-md border border-accent/20 bg-secondary px-3 py-2 text-carbon">
               {currentPage} / {totalPages}
             </span>
             <button
@@ -420,20 +539,20 @@ export default function AdminMembers() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-[80] flex items-end justify-center overflow-hidden bg-black/70 p-4 backdrop-blur-sm sm:items-center">
-          <div className="my-8 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border border-beth-gold/25 bg-beth-ink p-6 shadow-glow">
+          <div className="my-8 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border border-accent/30 bg-white p-6 shadow-xl">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-bold text-beth-gold">{editingMember ? 'Editar miembro' : 'Nuevo miembro'}</h2>
-                <p className="mt-2 text-sm text-beth-ivory/65">Completá los datos del miembro.</p>
+                <h2 className="text-3xl font-bold text-primary">{editingMember ? 'Editar miembro' : 'Nuevo miembro'}</h2>
+                <p className="mt-2 text-sm text-muted">Completá los datos del miembro.</p>
               </div>
-              <button type="button" className="rounded-md border border-white/15 px-3 py-1 text-2xl text-beth-gold" onClick={closeModal}>
+              <button type="button" className="rounded-md border border-accent/20 px-3 py-1 text-2xl text-accent hover:bg-secondary" onClick={closeModal}>
                 ×
               </button>
             </div>
 
             <form className="mt-6 grid gap-5 sm:grid-cols-2" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="apellido">
+                <label className="block text-sm font-bold text-primary" htmlFor="apellido">
                   Apellido
                 </label>
                 <input
@@ -446,7 +565,7 @@ export default function AdminMembers() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="nombre">
+                <label className="block text-sm font-bold text-primary" htmlFor="nombre">
                   Nombre
                 </label>
                 <input
@@ -459,7 +578,7 @@ export default function AdminMembers() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="dni">
+                <label className="block text-sm font-bold text-primary" htmlFor="dni">
                   DNI
                 </label>
                 <input
@@ -473,7 +592,7 @@ export default function AdminMembers() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="telefono">
+                <label className="block text-sm font-bold text-primary" htmlFor="telefono">
                   Teléfono
                 </label>
                 <input
@@ -486,7 +605,33 @@ export default function AdminMembers() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="fecha_nacimiento">
+                <label className="block text-sm font-bold text-primary" htmlFor="localidad">
+                  Localidad
+                </label>
+                <input
+                  id="localidad"
+                  className="form-input mt-2"
+                  placeholder="Ej: Wanda, Puerto Iguazú..."
+                  value={form.localidad}
+                  onChange={(event) => setForm({ ...form, localidad: event.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-primary" htmlFor="fecha_bautismo">
+                  Fecha de Bautismo
+                </label>
+                <input
+                  id="fecha_bautismo"
+                  type="date"
+                  className="form-input mt-2"
+                  value={form.fecha_bautismo}
+                  onChange={(event) => setForm({ ...form, fecha_bautismo: event.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-primary" htmlFor="fecha_nacimiento">
                   Fecha de Nacimiento
                 </label>
                 <input
@@ -499,14 +644,14 @@ export default function AdminMembers() {
               </div>
 
               <div className="flex items-end">
-                <label className="flex w-full items-center justify-between gap-4 rounded-lg border border-white/10 bg-beth-night px-4 py-3">
+                <label className="flex w-full items-center justify-between gap-4 rounded-lg border border-accent/20 bg-secondary px-4 py-3">
                   <span>
-                    <span className="block text-sm font-bold text-beth-gold">Estado activo</span>
-                    <span className="text-xs text-beth-ivory/55">{form.activo ? 'Activo' : 'Inactivo'}</span>
+                    <span className="block text-sm font-bold text-primary">Estado activo</span>
+                    <span className="text-xs text-muted">{form.activo ? 'Activo' : 'Inactivo'}</span>
                   </span>
                   <input
                     type="checkbox"
-                    className="h-5 w-5 accent-beth-gold"
+                    className="h-5 w-5 accent-accent"
                     checked={form.activo}
                     onChange={(event) => setForm({ ...form, activo: event.target.checked })}
                   />
@@ -514,7 +659,7 @@ export default function AdminMembers() {
               </div>
 
               {formError && (
-                <p className="rounded-md border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-100 sm:col-span-2">
+                <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 sm:col-span-2">
                   {formError}
                 </p>
               )}
@@ -535,10 +680,10 @@ export default function AdminMembers() {
       {toast && (
         <div
           className={[
-            'fixed right-5 top-24 z-[90] max-w-sm rounded-lg border p-4 shadow-glow',
+            'fixed right-5 top-24 z-[90] max-w-sm rounded-lg border p-4 shadow-xl',
             toast.type === 'success'
-              ? 'border-emerald-300/40 bg-emerald-500/15 text-emerald-50'
-              : 'border-red-300/40 bg-red-500/15 text-red-50',
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+              : 'border-red-200 bg-red-50 text-red-800',
           ].join(' ')}
           role="status"
         >

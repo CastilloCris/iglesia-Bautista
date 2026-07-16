@@ -4,6 +4,9 @@ import { supabase } from '../lib/supabase.js'
 import PageHero from '../components/PageHero.jsx'
 import BlogCard from '../components/BlogCard.jsx'
 
+const statusCard = 'rounded-xl border border-accent/40 bg-white p-8 text-center text-muted shadow-sm'
+const errorCard  = 'rounded-xl border border-red-300/50 bg-white p-8 text-center text-red-500 shadow-sm'
+
 export default function MinisterioDetalle() {
   const { id } = useParams()
   const [ministerio, setMinisterio] = useState(null)
@@ -43,11 +46,11 @@ export default function MinisterioDetalle() {
     return (
       <>
         <PageHero title="Ministerio" />
-        <section className="container-page section-pad">
-          <div className="rounded-lg border-2 border-beth-gold/30 bg-beth-night p-8 text-center text-gray-300 shadow-sm" style={{boxShadow: '0 2px 12px rgba(212, 175, 55, 0.2)'}}>
-            Cargando ministerio...
-          </div>
-        </section>
+        <div className="min-h-screen bg-secondary">
+          <section className="container-page section-pad">
+            <div className={statusCard}>Cargando ministerio...</div>
+          </section>
+        </div>
       </>
     )
   }
@@ -56,11 +59,13 @@ export default function MinisterioDetalle() {
     return (
       <>
         <PageHero title="Error" />
-        <section className="container-page section-pad">
-          <div className="rounded-lg border-2 border-red-600/30 bg-beth-night p-8 text-center text-red-400 shadow-sm" style={{boxShadow: '0 2px 12px rgba(220, 38, 38, 0.2)'}}>
-            {error ? `No se pudo cargar el ministerio: ${error}` : 'Ministerio no encontrado.'}
-          </div>
-        </section>
+        <div className="min-h-screen bg-secondary">
+          <section className="container-page section-pad">
+            <div className={errorCard}>
+              {error ? `No se pudo cargar el ministerio: ${error}` : 'Ministerio no encontrado.'}
+            </div>
+          </section>
+        </div>
       </>
     )
   }
@@ -68,35 +73,43 @@ export default function MinisterioDetalle() {
   return (
     <>
       <PageHero title={ministerio.nombre} subtitle={ministerio.descripcion} />
-      <section className="container-page section-pad">
-        {ministerio.imagen_url && (
-          <div className="mb-12">
-            <img src={ministerio.imagen_url} alt={ministerio.nombre} className="w-full rounded-lg object-cover" style={{maxHeight: '400px'}} />
-          </div>
-        )}
 
-        {ministerio.descripcion && (
-          <div className="mb-12 max-w-3xl">
-            <p className="text-lg text-gray-300">{ministerio.descripcion}</p>
-          </div>
-        )}
-
-        <div className="border-t border-beth-gold/20 pt-12">
-          <h2 className="font-serif text-3xl font-bold text-beth-gold">Últimas noticias</h2>
-
-          {posts.length === 0 ? (
-            <div className="mt-8 rounded-lg border-2 border-beth-gold/30 bg-beth-night p-8 text-center text-gray-300 shadow-sm" style={{boxShadow: '0 2px 12px rgba(212, 175, 55, 0.2)'}}>
-              Próximamente compartiremos novedades de este ministerio.
-            </div>
-          ) : (
-            <div className="mt-8 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post) => (
-                <BlogCard key={post.id} post={post} />
-              ))}
+      <div className="min-h-screen bg-secondary">
+        <section className="container-page section-pad">
+          {ministerio.imagen_url && (
+            <div className="mb-12">
+              <img
+                src={ministerio.imagen_url}
+                alt={ministerio.nombre}
+                className="w-full rounded-xl object-cover shadow-md border border-accent/20"
+                style={{ maxHeight: '400px' }}
+              />
             </div>
           )}
-        </div>
-      </section>
+
+          {ministerio.descripcion && (
+            <div className="mb-12 max-w-3xl">
+              <p className="text-lg text-carbon leading-relaxed">{ministerio.descripcion}</p>
+            </div>
+          )}
+
+          <div className="border-t border-accent/20 pt-12">
+            <h2 className="font-serif text-3xl font-bold text-primary">Últimas noticias</h2>
+
+            {posts.length === 0 ? (
+              <div className={`mt-8 ${statusCard}`}>
+                Próximamente compartiremos novedades de este ministerio.
+              </div>
+            ) : (
+              <div className="mt-8 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {posts.map((post) => (
+                  <BlogCard key={post.id} post={post} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
     </>
   )
 }

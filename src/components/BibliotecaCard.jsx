@@ -4,7 +4,7 @@ export default function BibliotecaCard({ libro }) {
       href={libro.pdf_url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex gap-3 rounded-lg bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md border border-gray-100 p-3"
+      className="group flex gap-3 rounded-xl bg-surface shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md border border-accent/40 hover:border-accent p-3"
     >
       {/* Portada pequeña — estilo libro */}
       <div className="w-14 flex-shrink-0">
@@ -16,7 +16,7 @@ export default function BibliotecaCard({ libro }) {
           />
         ) : (
           // Placeholder si no hay portada
-          <div className="flex h-20 w-full items-center justify-center rounded bg-blue-100 text-2xl">
+          <div className="flex h-20 w-full items-center justify-center rounded bg-accent/10 text-2xl">
             📖
           </div>
         )}
@@ -24,13 +24,13 @@ export default function BibliotecaCard({ libro }) {
       {/* Info */}
       <div className="flex min-w-0 flex-col justify-between">
         <div>
-          <h3 className="font-serif text-sm leading-snug line-clamp-2 text-gray-900 transition-colors group-hover:text-blue-600">
+          <h3 className="font-serif text-sm leading-snug line-clamp-2 text-primary transition-colors group-hover:text-primary-light">
             {libro.titulo}
           </h3>
-          <p className="mt-0.5 text-xs text-gray-500">{libro.autor}</p>
+          <p className="mt-0.5 text-xs text-muted">{libro.autor}</p>
         </div>
         {libro.categoria && (
-          <span className="mt-1 w-fit rounded-full bg-gray-900 px-2 py-0.5 text-[10px] uppercase tracking-wide text-white">
+          <span className="mt-1 w-fit rounded-full bg-primary px-2 py-0.5 text-[10px] uppercase tracking-wide text-white">
             {libro.categoria}
           </span>
         )}

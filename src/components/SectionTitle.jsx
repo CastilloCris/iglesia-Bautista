@@ -6,7 +6,7 @@ export default function SectionTitle({ children, align = 'center', light = false
     <div className={`mb-12 ${alignment}`}>
       <h2 className={`inline-block font-serif text-[2.5rem] font-semibold ${light ? 'text-white' : 'text-primary'}`}>
         {children}
-        <span className={`block h-[3px] w-16 ${light ? 'bg-white/50' : 'bg-beth-gold'} ${lineAlign} mt-3`} />
+        <span className={`block h-[3px] w-16 ${light ? 'bg-white/50' : 'bg-accent'} ${lineAlign} mt-3`} />
       </h2>
     </div>
   )

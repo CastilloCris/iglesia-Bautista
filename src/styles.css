@@ -7,11 +7,21 @@
     scroll-behavior: smooth;
   }
 
+  :root {
+    --color-bg:       #FFFDF7;
+    --color-surface:  #FFFFFF;
+    --color-border:   #B8860B;
+    --color-primary:  #7C3D12;
+    --color-accent:   #B8860B;
+    --color-text:     #2D2D2D;
+    --color-muted:    #6B5B45;
+  }
+
   body {
     margin: 0;
     font-family: "Open Sans", ui-sans-serif, system-ui, sans-serif;
-    background: #0f0f0f;
-    color: #f5f5f5;
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
 
   h1,
@@ -19,7 +29,7 @@
   h3,
   h4 {
     font-family: "Playfair Display", Georgia, serif;
-    color: #d4af37;
+    color: #7C3D12;
   }
 }
 
@@ -33,7 +43,7 @@
   }
 
   .page-hero {
-    @apply relative overflow-hidden bg-primary px-5 py-16 text-center text-white;
+    @apply relative overflow-hidden bg-primary border-b-4 border-accent px-5 py-16 text-center text-white;
   }
 
   .page-title {
@@ -41,36 +51,36 @@
   }
 
   .section-title {
-    @apply text-center font-serif text-[2.5rem] font-semibold text-beth-gold;
+    @apply text-center font-serif text-[2.5rem] font-semibold text-primary;
   }
 
   .section-kicker {
-    @apply mt-3 text-sm font-bold uppercase tracking-[0.22em] text-beth-goldSoft;
+    @apply mt-3 text-sm font-bold uppercase tracking-[0.22em] text-accent;
   }
 
   .btn {
-    @apply mt-7 inline-flex items-center justify-center rounded-full bg-beth-gold px-10 py-4 font-bold uppercase tracking-widest text-black shadow-[0_4px_15px_rgba(212,175,55,0.4)] transition-all hover:scale-105 hover:bg-beth-goldSoft hover:shadow-[0_6px_20px_rgba(212,175,55,0.6)];
+    @apply mt-7 inline-flex items-center justify-center rounded-full bg-primary text-white font-bold uppercase tracking-widest px-10 py-4
+      shadow-[0_4px_15px_rgba(124,61,18,0.35)]
+      border border-accent/20
+      transition-all hover:scale-105 hover:bg-primary-light
+      hover:shadow-[0_6px_20px_rgba(184,134,11,0.4)];
   }
 
   .btn-outline {
-    @apply border-2 border-beth-gold bg-transparent text-beth-gold shadow-none hover:bg-beth-gold hover:text-black;
+    @apply border-2 border-accent bg-transparent text-accent shadow-none hover:bg-accent hover:text-white;
   }
 
+  /* Light card — golden borders */
   .surface {
-    @apply rounded-lg border border-white/10 bg-white/[0.06] p-6 shadow-glow;
+    @apply rounded-xl border border-accent/40 hover:border-accent bg-surface p-6 shadow-sm hover:shadow-md transition-all;
   }
 
   .form-input {
-    @apply w-full rounded-md border border-white/15 bg-beth-night px-4 py-3 text-beth-ivory outline-none transition placeholder:text-beth-ivory/45 focus:border-beth-gold focus:ring-2 focus:ring-beth-gold/25;
+    @apply w-full rounded-md border border-accent/30 bg-white px-4 py-3 text-carbon outline-none transition placeholder:text-muted/60 focus:border-accent focus:ring-2 focus:ring-accent/25;
   }
 
+  /* Updated card — light background with golden borders */
   .card-professional {
-    @apply rounded-lg border-2 border-beth-gold bg-beth-night px-8 py-10 text-center shadow-sm transition;
-    box-shadow: 0 2px 12px rgba(212, 175, 55, 0.2), inset 0 0 0 1px rgba(212, 175, 55, 0.5);
-  }
-
-  .card-professional:hover {
-    @apply -translate-y-1 shadow-md;
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3), inset 0 0 0 2px rgba(212, 175, 55, 0.7);
+    @apply rounded-xl border border-accent/40 bg-surface px-8 py-10 text-center shadow-sm transition-all hover:border-accent hover:shadow-md hover:-translate-y-1;
   }
 }

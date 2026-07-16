@@ -31,15 +31,16 @@ export default function Ministries() {
   return (
     <>
       <PageHero title="Ministerios" />
+      <div className="min-h-screen bg-secondary">
       <section className="container-page px-5 py-16">
-        {loading && <div className="rounded-lg border-2 border-beth-gold/30 bg-beth-night p-8 text-center text-gray-300 shadow-sm" style={{boxShadow: '0 2px 12px rgba(212, 175, 55, 0.2)'}}>Cargando ministerios...</div>}
+        {loading && <div className="rounded-xl border border-accent/40 bg-surface p-8 text-center text-muted shadow-sm">Cargando ministerios...</div>}
 
         {!loading && error && (
-          <div className="rounded-lg border-2 border-red-600/30 bg-beth-night p-8 text-center text-red-400 shadow-sm" style={{boxShadow: '0 2px 12px rgba(220, 38, 38, 0.2)'}}>No se pudieron cargar los ministerios: {error}</div>
+          <div className="rounded-xl border border-red-300/50 bg-surface p-8 text-center text-red-600 shadow-sm">No se pudieron cargar los ministerios: {error}</div>
         )}
 
         {!loading && !error && ministerios.length === 0 && (
-          <div className="rounded-lg border-2 border-beth-gold/30 bg-beth-night p-8 text-center text-gray-300 shadow-sm" style={{boxShadow: '0 2px 12px rgba(212, 175, 55, 0.2)'}}>Todavía no hay ministerios disponibles.</div>
+          <div className="rounded-xl border border-accent/40 bg-surface p-8 text-center text-muted shadow-sm">Todavía no hay ministerios disponibles.</div>
         )}
 
         {!loading && !error && ministerios.length > 0 && (
@@ -65,6 +66,7 @@ export default function Ministries() {
           </div>
         )}
       </section>
+      </div>
     </>
   )
 }

@@ -4,18 +4,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#d4af37',
-        'primary-light': '#f4d77f',
-        secondary: '#1a1a2e',
-        accent: '#d4af37',
-        carbon: '#1a1a2e',
+        primary:        '#7C3D12',   // Marrón cálido — títulos, botones principales
+        'primary-light':'#9A4F1A',
+        secondary:      '#FFFDF7',   // Blanco marfil — fondo general
+        accent:         '#B8860B',   // Dorado oscuro — bordes de cards, líneas decorativas
+        'accent-light': '#D4A017',   // Dorado claro — hover de bordes
+        surface:        '#FFFFFF',   // Blanco puro — fondo de cards
+        muted:          '#6B5B45',   // Texto secundario
+        carbon:         '#2D2D2D',   // Texto cuerpo
+        // Legacy beth.* tokens kept for backwards compat
         beth: {
-          ink: '#0f0f0f',
-          night: '#1a1a2e',
-          gold: '#d4af37',
-          goldSoft: '#f4d77f',
-          ivory: '#f5f5f5',
-          wine: '#d4af37',
+          ink:     '#0f0f0f',
+          night:   '#FFFDF7',
+          gold:    '#B8860B',
+          goldSoft:'#D4A017',
+          ivory:   '#f5f5f5',
+          wine:    '#7C3D12',
         },
       },
       fontFamily: {

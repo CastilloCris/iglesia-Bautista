@@ -26,25 +26,34 @@ export default function AdminLayoutNote({ title, children }) {
         <h1 className="page-title">{title}</h1>
         <p className="section-kicker">Panel de administración</p>
       </section>
-      <section className="container-page section-pad">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-3">
-            {adminLinks.map((link) => (
-              <Link key={link.to} to={link.to} className="btn btn-outline">
-                {link.label}
-              </Link>
-            ))}
+
+      <div className="min-h-screen bg-secondary">
+        <section className="container-page section-pad">
+          {/* Barra de navegación admin */}
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-3">
+              {adminLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="inline-flex items-center justify-center rounded-full border-2 border-accent px-5 py-2 text-xs font-bold uppercase tracking-wide text-accent transition hover:bg-accent hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-full border border-red-400/50 px-5 py-2 text-sm font-bold uppercase tracking-wide text-red-600 transition hover:bg-red-50"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
+            </button>
           </div>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-full border border-red-300/40 px-5 py-3 text-sm font-bold uppercase tracking-wide text-red-100 transition hover:bg-red-500/15"
-            onClick={handleLogout}
-          >
-            Cerrar sesión
-          </button>
-        </div>
-        {children}
-      </section>
+
+          {children}
+        </section>
+      </div>
     </>
   )
 }

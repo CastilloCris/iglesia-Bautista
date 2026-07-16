@@ -248,30 +248,30 @@ export default function AdminBlog() {
       <div className="surface">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-beth-gold">Entradas</h2>
-            <p className="mt-2 text-beth-ivory/70">Creá, editá, publicá y administrá contenidos del blog.</p>
+            <h2 className="text-2xl font-bold text-primary">Entradas</h2>
+            <p className="mt-2 text-muted">Creá, editá, publicá y administrá contenidos del blog.</p>
           </div>
           <button type="button" className="btn" onClick={openCreateModal}>
             Nueva entrada
           </button>
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-lg border border-white/10">
+        <div className="mt-8 overflow-hidden rounded-lg border border-accent/20">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/10">
-              <thead className="bg-beth-night">
+            <table className="min-w-full divide-y divide-accent/20">
+              <thead className="bg-secondary">
                 <tr>
                   {['Título', 'Destino', 'Estado', 'Fecha', 'Acciones'].map((header) => (
-                    <th key={header} className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-beth-gold">
+                    <th key={header} className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-primary">
                       {header}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10 bg-white/[0.03]">
+              <tbody className="divide-y divide-accent/20 bg-white">
                 {loading && (
                   <tr>
-                    <td colSpan="5" className="px-4 py-8 text-center text-beth-ivory/70">
+                    <td colSpan="5" className="px-4 py-8 text-center text-muted">
                       Cargando entradas...
                     </td>
                   </tr>
@@ -279,7 +279,7 @@ export default function AdminBlog() {
 
                 {!loading && sortedPosts.length === 0 && (
                   <tr>
-                    <td colSpan="5" className="px-4 py-8 text-center text-beth-ivory/70">
+                    <td colSpan="5" className="px-4 py-8 text-center text-muted">
                       Todavía no hay entradas cargadas.
                     </td>
                   </tr>
@@ -287,13 +287,13 @@ export default function AdminBlog() {
 
                 {!loading &&
                   sortedPosts.map((post) => (
-                    <tr key={post.id} className="transition hover:bg-white/[0.06]">
+                    <tr key={post.id} className="transition hover:bg-secondary/50">
                       <td className="px-4 py-4">
-                        <p className="font-semibold text-beth-ivory">{post.titulo}</p>
-                        <p className="mt-1 text-xs text-beth-ivory/50">/{post.slug}</p>
+                        <p className="font-semibold text-carbon">{post.titulo}</p>
+                        <p className="mt-1 text-xs text-muted">/{post.slug}</p>
                       </td>
                       <td className="whitespace-nowrap px-4 py-4">
-                        <span className="inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide bg-blue-400/15 text-blue-200">
+                        <span className="inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide bg-blue-50 text-blue-700">
                           {post.ministerio_id ? `⛪ ${post.ministerios?.nombre}` : '📰 Blog'}
                         </span>
                       </td>
@@ -301,13 +301,13 @@ export default function AdminBlog() {
                         <span
                           className={[
                             'inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide',
-                            post.publicado ? 'bg-emerald-400/15 text-emerald-200' : 'bg-zinc-400/15 text-zinc-200',
+                            post.publicado ? 'bg-emerald-50 text-emerald-700' : 'bg-zinc-100 text-zinc-700',
                           ].join(' ')}
                         >
                           {post.publicado ? 'Publicado' : 'Borrador'}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-4 py-4 text-beth-ivory/75">{formatPostDate(getPostDate(post))}</td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted">{formatPostDate(getPostDate(post))}</td>
                       <td className="px-4 py-4">
                         <div className="flex flex-wrap gap-2">
                           <button type="button" className="btn btn-outline px-4 py-2 text-xs" onClick={() => openEditModal(post)}>
@@ -318,7 +318,7 @@ export default function AdminBlog() {
                           </button>
                           <button
                             type="button"
-                            className="inline-flex items-center justify-center rounded-full border border-red-300/40 px-4 py-2 text-xs font-bold uppercase tracking-wide text-red-100 transition hover:bg-red-500/15"
+                            className="inline-flex items-center justify-center rounded-full border border-red-200 px-4 py-2 text-xs font-bold uppercase tracking-wide text-red-600 transition hover:bg-red-50"
                             onClick={() => deletePost(post)}
                           >
                             Eliminar
@@ -335,27 +335,27 @@ export default function AdminBlog() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-[80] flex items-end justify-center overflow-hidden bg-black/70 p-4 backdrop-blur-sm sm:items-center">
-          <div className="my-8 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-beth-gold/25 bg-beth-ink p-6 shadow-glow">
+          <div className="my-8 max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-accent/30 bg-white p-6 shadow-xl">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-bold text-beth-gold">{editingPost ? 'Editar entrada' : 'Nueva entrada'}</h2>
-                <p className="mt-2 text-sm text-beth-ivory/65">El slug se genera automáticamente desde el título.</p>
+                <h2 className="text-3xl font-bold text-primary">{editingPost ? 'Editar entrada' : 'Nueva entrada'}</h2>
+                <p className="mt-2 text-sm text-muted">El slug se genera automáticamente desde el título.</p>
               </div>
-              <button type="button" className="rounded-md border border-white/15 px-3 py-1 text-2xl text-beth-gold" onClick={closeModal}>
+              <button type="button" className="rounded-md border border-accent/20 px-3 py-1 text-2xl text-accent hover:bg-secondary" onClick={closeModal}>
                 ×
               </button>
             </div>
 
             <form className="mt-6 grid gap-5 lg:grid-cols-2" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="titulo">
+                <label className="block text-sm font-bold text-primary" htmlFor="titulo">
                   Título
                 </label>
                 <input id="titulo" className="form-input mt-2" required value={form.titulo} onChange={(event) => updateTitle(event.target.value)} />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="slug">
+                <label className="block text-sm font-bold text-primary" htmlFor="slug">
                   Slug
                 </label>
                 <input
@@ -368,9 +368,9 @@ export default function AdminBlog() {
               </div>
 
               <div className="lg:col-span-2">
-                <label className="flex items-center justify-between gap-4 text-sm font-bold text-beth-gold" htmlFor="resumen">
+                <label className="flex items-center justify-between gap-4 text-sm font-bold text-primary" htmlFor="resumen">
                   <span>Resumen</span>
-                  <span className={form.resumen.length > 300 ? 'text-red-200' : 'text-beth-ivory/50'}>{form.resumen.length}/300</span>
+                  <span className={form.resumen.length > 300 ? 'text-red-600' : 'text-muted'}>{form.resumen.length}/300</span>
                 </label>
                 <textarea
                   id="resumen"
@@ -383,7 +383,7 @@ export default function AdminBlog() {
               </div>
 
               <div className="lg:col-span-2">
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="contenido">
+                <label className="block text-sm font-bold text-primary" htmlFor="contenido">
                   Contenido
                 </label>
                 <textarea
@@ -396,21 +396,21 @@ export default function AdminBlog() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="imagen">
+                <label className="block text-sm font-bold text-primary" htmlFor="imagen">
                   Imagen de portada
                 </label>
                 <input
                   id="imagen"
                   type="file"
                   accept="image/*"
-                  className="mt-2 block w-full text-sm text-beth-ivory/75 file:mr-4 file:rounded-full file:border-0 file:bg-beth-gold file:px-4 file:py-2 file:font-bold file:text-beth-night"
+                  className="mt-2 block w-full text-sm text-carbon/75 file:mr-4 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-bold file:text-white"
                   onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
                 />
                 {imagePreview && <img src={imagePreview} alt="Preview portada" className="mt-4 aspect-video w-full rounded-lg object-cover" />}
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="video_url">
+                <label className="block text-sm font-bold text-primary" htmlFor="video_url">
                   Video URL YouTube/Vimeo
                 </label>
                 <input
@@ -424,20 +424,20 @@ export default function AdminBlog() {
                   }}
                 />
 
-                <label className="mt-4 block text-sm font-bold text-beth-gold" htmlFor="video_file">
+                <label className="mt-4 block text-sm font-bold text-primary" htmlFor="video_file">
                   O subir video pequeño
                 </label>
                 <input
                   id="video_file"
                   type="file"
                   accept="video/*"
-                  className="mt-2 block w-full text-sm text-beth-ivory/75 file:mr-4 file:rounded-full file:border-0 file:bg-beth-gold file:px-4 file:py-2 file:font-bold file:text-beth-night"
+                  className="mt-2 block w-full text-sm text-carbon/75 file:mr-4 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-bold file:text-white"
                   onChange={(event) => {
                     const file = event.target.files?.[0] ?? null
                     setVideoFile(file)
                   }}
                 />
-                <p className="mt-2 text-xs text-beth-ivory/50">Máximo 50MB.</p>
+                <p className="mt-2 text-xs text-muted">Máximo 50MB.</p>
 
                 {embedUrl && !videoFile && (
                   <iframe title="Preview video" src={embedUrl} className="mt-4 aspect-video w-full rounded-lg" allowFullScreen />
@@ -457,11 +457,11 @@ export default function AdminBlog() {
               </div>
 
               <div className="lg:col-span-2">
-                <label className="block mb-2 font-semibold text-beth-gold">Publicar en</label>
+                <label className="block mb-2 font-semibold text-primary">Publicar en</label>
                 <select
                   value={ministerioId}
                   onChange={(e) => setMinisterioId(e.target.value)}
-                  className="w-full rounded-lg border border-white/20 bg-beth-night px-3 py-2 text-beth-ivory focus:border-beth-gold focus:outline-none"
+                  className="w-full rounded-lg border border-accent/30 bg-white px-3 py-2 text-carbon focus:border-accent focus:outline-none"
                 >
                   <option value="">📰 Blog general</option>
                   {ministerios.map((m) => (
@@ -472,21 +472,21 @@ export default function AdminBlog() {
                 </select>
               </div>
 
-              <label className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-beth-night px-4 py-3 lg:col-span-2">
+              <label className="flex items-center justify-between gap-4 rounded-lg border border-accent/20 bg-secondary px-4 py-3 lg:col-span-2">
                 <span>
-                  <span className="block text-sm font-bold text-beth-gold">Publicado</span>
-                  <span className="text-xs text-beth-ivory/55">{form.publicado ? 'Visible en el blog público' : 'Guardado como borrador'}</span>
+                  <span className="block text-sm font-bold text-primary">Publicado</span>
+                  <span className="text-xs text-muted">{form.publicado ? 'Visible en el blog público' : 'Guardado como borrador'}</span>
                 </span>
                 <input
                   type="checkbox"
-                  className="h-5 w-5 accent-beth-gold"
+                  className="h-5 w-5 accent-accent"
                   checked={form.publicado}
                   onChange={(event) => setForm({ ...form, publicado: event.target.checked })}
                 />
               </label>
 
               {formError && (
-                <p className="rounded-md border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-100 lg:col-span-2">{formError}</p>
+                <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700 lg:col-span-2">{formError}</p>
               )}
 
               <div className="flex flex-wrap justify-end gap-3 lg:col-span-2">
@@ -505,10 +505,10 @@ export default function AdminBlog() {
       {toast && (
         <div
           className={[
-            'fixed right-5 top-24 z-[90] max-w-sm rounded-lg border p-4 shadow-glow',
+            'fixed right-5 top-24 z-[90] max-w-sm rounded-lg border p-4 shadow-xl',
             toast.type === 'success'
-              ? 'border-emerald-300/40 bg-emerald-500/15 text-emerald-50'
-              : 'border-red-300/40 bg-red-500/15 text-red-50',
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+              : 'border-red-200 bg-red-50 text-red-800',
           ].join(' ')}
           role="status"
         >

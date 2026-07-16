@@ -1,7 +1,13 @@
 export const LIBRARY_TABLE = 'biblioteca'
 export const LIBRARY_BUCKET = 'biblioteca-pdfs'
 
-export const LIBRARY_CATEGORIES = ['Teología', 'Devocional', 'Historia', 'Infantil', 'Otro']
+export const LIBRARY_CATEGORIES = [
+  'Recurso para Células',
+  'Liderazgo',
+  'Devocionales',
+  'Teología',
+  'Otro',
+]
 
 export function formatLibraryDate(value) {
   if (!value) return '-'

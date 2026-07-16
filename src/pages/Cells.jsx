@@ -23,18 +23,19 @@ export default function Cells() {
   return (
     <>
       <PageHero title="Células" subtitle="Iglesias en las casas" />
+      <div className="min-h-screen bg-secondary">
       <section className="container-page px-5 py-16">
         <div className="text-center">
           <SectionTitle>Encuentra tu Célula</SectionTitle>
-          <p className="-mt-8 text-gray-300">Busca la que esté más cerca de tu hogar.</p>
+          <p className="-mt-8 text-muted">Busca la que esté más cerca de tu hogar.</p>
         </div>
 
         {loading && (
-          <p className="mt-12 text-center text-gray-300">Cargando células...</p>
+          <p className="mt-12 text-center text-muted">Cargando células...</p>
         )}
 
         {!loading && celulas.length === 0 && (
-          <p className="mt-12 text-center text-gray-300">No hay células disponibles por el momento.</p>
+          <p className="mt-12 text-center text-muted">No hay células disponibles por el momento.</p>
         )}
 
         {!loading && celulas.length > 0 && (
@@ -48,18 +49,18 @@ export default function Cells() {
                     className="mx-auto mb-5 h-[120px] w-[120px] rounded-full border-4 border-primary object-cover shadow-md"
                   />
                 ) : (
-                  <div className="mx-auto mb-5 flex h-[120px] w-[120px] items-center justify-center rounded-full border-4 border-primary bg-beth-gold/20">
-                    <span className="font-serif text-3xl font-bold text-beth-gold">
+                  <div className="mx-auto mb-5 flex h-[120px] w-[120px] items-center justify-center rounded-full border-4 border-accent bg-accent/10">
+                    <span className="font-serif text-3xl font-bold text-accent">
                       {celula.familia?.[0]?.toUpperCase() || '?'}
                     </span>
                   </div>
                 )}
                 <h3 className="mb-3 font-serif text-2xl text-primary">{celula.familia}</h3>
-                <p className="mb-2 text-gray-300">
-                  <strong className="text-beth-gold">Barrio:</strong> {celula.barrio}
+                <p className="mb-2 text-carbon">
+                  <strong className="text-accent">Barrio:</strong> {celula.barrio}
                 </p>
-                <p className="mb-4 text-gray-300">
-                  <strong className="text-beth-gold">Reunión:</strong> {celula.dia_reunion}
+                <p className="mb-4 text-carbon">
+                  <strong className="text-accent">Reunión:</strong> {celula.dia_reunion}
                   {celula.hora_reunion && ` – ${celula.hora_reunion}`}
                 </p>
                 {celula.maps_url && (
@@ -77,6 +78,7 @@ export default function Cells() {
           </div>
         )}
       </section>
+      </div>
     </>
   )
 }

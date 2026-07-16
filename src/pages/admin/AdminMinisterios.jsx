@@ -239,8 +239,8 @@ export default function AdminMinisterios() {
       <div className="surface">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-beth-gold">Ministerios</h2>
-            <p className="mt-2 text-beth-ivory/70">Alta, modificación, búsqueda y eliminación de ministerios.</p>
+            <h2 className="text-2xl font-bold text-primary">Ministerios</h2>
+            <p className="mt-2 text-muted">Alta, modificación, búsqueda y eliminación de ministerios.</p>
           </div>
           <button type="button" className="btn" onClick={openCreateModal}>
             Nuevo Ministerio
@@ -248,7 +248,7 @@ export default function AdminMinisterios() {
         </div>
 
         <div className="mt-8">
-          <label className="block text-sm font-bold text-beth-gold" htmlFor="ministerio-search">
+          <label className="block text-sm font-bold text-primary" htmlFor="ministerio-search">
             Buscar por nombre o descripción
           </label>
           <input
@@ -260,22 +260,22 @@ export default function AdminMinisterios() {
           />
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-lg border border-white/10">
+        <div className="mt-8 overflow-hidden rounded-lg border border-accent/20">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/10">
-              <thead className="bg-beth-night">
+            <table className="min-w-full divide-y divide-accent/20">
+              <thead className="bg-secondary">
                 <tr>
                   {['Imagen', 'Nombre', 'Descripción', 'Orden', 'Estado', 'Acciones'].map((header) => (
-                    <th key={header} scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-beth-gold">
+                    <th key={header} scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-primary">
                       {header}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10 bg-white/[0.03]">
+              <tbody className="divide-y divide-accent/20 bg-white">
                 {loading && (
                   <tr>
-                    <td colSpan="6" className="px-4 py-8 text-center text-beth-ivory/70">
+                    <td colSpan="6" className="px-4 py-8 text-center text-muted">
                       Cargando ministerios...
                     </td>
                   </tr>
@@ -283,7 +283,7 @@ export default function AdminMinisterios() {
 
                 {!loading && paginatedMinisterios.length === 0 && (
                   <tr>
-                    <td colSpan="6" className="px-4 py-8 text-center text-beth-ivory/70">
+                    <td colSpan="6" className="px-4 py-8 text-center text-muted">
                       No se encontraron ministerios.
                     </td>
                   </tr>
@@ -291,7 +291,7 @@ export default function AdminMinisterios() {
 
                 {!loading &&
                   paginatedMinisterios.map((ministerio) => (
-                    <tr key={ministerio.id} className="transition hover:bg-white/[0.06]">
+                    <tr key={ministerio.id} className="transition hover:bg-secondary/50">
                       <td className="whitespace-nowrap px-4 py-4">
                         {ministerio.imagen_url ? (
                           <img
@@ -300,19 +300,19 @@ export default function AdminMinisterios() {
                             className="h-12 w-12 rounded-lg object-cover"
                           />
                         ) : (
-                          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-beth-gold/20">
-                            <span className="text-xs font-bold text-beth-gold">{ministerio.nombre?.[0]?.toUpperCase() || '?'}</span>
+                          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/20">
+                            <span className="text-xs font-bold text-accent">{ministerio.nombre?.[0]?.toUpperCase() || '?'}</span>
                           </div>
                         )}
                       </td>
-                      <td className="px-4 py-4 font-semibold text-beth-ivory">{ministerio.nombre}</td>
-                      <td className="px-4 py-4 text-sm text-beth-ivory/75 max-w-xs truncate">{ministerio.descripcion || '-'}</td>
-                      <td className="whitespace-nowrap px-4 py-4 text-beth-ivory/75">{ministerio.orden}</td>
+                      <td className="px-4 py-4 font-semibold text-carbon">{ministerio.nombre}</td>
+                      <td className="px-4 py-4 text-sm text-muted max-w-xs truncate">{ministerio.descripcion || '-'}</td>
+                      <td className="whitespace-nowrap px-4 py-4 text-muted">{ministerio.orden}</td>
                       <td className="whitespace-nowrap px-4 py-4">
                         <span
                           className={[
                             'inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide',
-                            ministerio.activo ? 'bg-emerald-400/15 text-emerald-200' : 'bg-red-400/15 text-red-200',
+                            ministerio.activo ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700',
                           ].join(' ')}
                         >
                           {ministerio.activo ? 'Activo' : 'Inactivo'}
@@ -325,7 +325,7 @@ export default function AdminMinisterios() {
                           </button>
                           <button
                             type="button"
-                            className="inline-flex items-center justify-center rounded-full border border-red-300/40 px-4 py-2 text-xs font-bold uppercase tracking-wide text-red-100 transition hover:bg-red-500/15"
+                            className="inline-flex items-center justify-center rounded-full border border-red-200 px-4 py-2 text-xs font-bold uppercase tracking-wide text-red-600 transition hover:bg-red-50"
                             onClick={() => handleDelete(ministerio)}
                           >
                             Eliminar
@@ -339,7 +339,7 @@ export default function AdminMinisterios() {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-sm text-beth-ivory/70">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-sm text-muted">
           <span>
             Mostrando {paginatedMinisterios.length} de {filteredMinisterios.length} registros
           </span>
@@ -352,7 +352,7 @@ export default function AdminMinisterios() {
             >
               Anterior
             </button>
-            <span className="rounded-md border border-white/10 bg-beth-night px-3 py-2 text-beth-ivory">
+            <span className="rounded-md border border-accent/20 bg-secondary px-3 py-2 text-carbon">
               {currentPage} / {totalPages}
             </span>
             <button
@@ -369,13 +369,13 @@ export default function AdminMinisterios() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-[80] flex items-end justify-center overflow-hidden bg-black/70 p-4 backdrop-blur-sm sm:items-center">
-          <div className="my-8 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border border-beth-gold/25 bg-beth-ink p-6 shadow-glow">
+          <div className="my-8 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border border-accent/30 bg-white p-6 shadow-xl">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-bold text-beth-gold">{editingMinisterio ? 'Editar ministerio' : 'Nuevo ministerio'}</h2>
-                <p className="mt-2 text-sm text-beth-ivory/65">Completá los datos del ministerio.</p>
+                <h2 className="text-3xl font-bold text-primary">{editingMinisterio ? 'Editar ministerio' : 'Nuevo ministerio'}</h2>
+                <p className="mt-2 text-sm text-muted">Completá los datos del ministerio.</p>
               </div>
-              <button type="button" className="rounded-md border border-white/15 px-3 py-1 text-2xl text-beth-gold" onClick={closeModal}>
+              <button type="button" className="rounded-md border border-accent/20 px-3 py-1 text-2xl text-accent hover:bg-secondary" onClick={closeModal}>
                 ×
               </button>
             </div>
@@ -383,7 +383,7 @@ export default function AdminMinisterios() {
             <form className="mt-6 grid gap-5" onSubmit={handleSubmit}>
               {/* Imagen */}
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="imagen">
+                <label className="block text-sm font-bold text-primary" htmlFor="imagen">
                   Imagen
                 </label>
                 <div className="mt-3 flex flex-col items-center gap-4">
@@ -392,7 +392,7 @@ export default function AdminMinisterios() {
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="h-32 w-32 rounded-lg object-cover border-2 border-beth-gold/30"
+                        className="h-32 w-32 rounded-lg object-cover border-2 border-accent/30"
                       />
                     </div>
                   )}
@@ -400,7 +400,7 @@ export default function AdminMinisterios() {
                     id="imagen"
                     type="file"
                     accept="image/*"
-                    className="w-full text-sm text-beth-ivory/65 file:mr-3 file:rounded-md file:border file:border-beth-gold/30 file:bg-beth-night file:px-4 file:py-2 file:text-sm file:font-semibold file:text-beth-gold hover:file:bg-beth-night/80"
+                    className="w-full text-sm text-carbon/65 file:mr-3 file:rounded-md file:border file:border-accent/30 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary hover:file:bg-secondary/80"
                     onChange={handleImageChange}
                     disabled={uploading}
                   />
@@ -408,7 +408,7 @@ export default function AdminMinisterios() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="nombre">
+                <label className="block text-sm font-bold text-primary" htmlFor="nombre">
                   Nombre
                 </label>
                 <input
@@ -421,7 +421,7 @@ export default function AdminMinisterios() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="descripcion">
+                <label className="block text-sm font-bold text-primary" htmlFor="descripcion">
                   Descripción
                 </label>
                 <textarea
@@ -434,7 +434,7 @@ export default function AdminMinisterios() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-beth-gold" htmlFor="orden">
+                <label className="block text-sm font-bold text-primary" htmlFor="orden">
                   Orden (posición en la grilla)
                 </label>
                 <input
@@ -449,14 +449,14 @@ export default function AdminMinisterios() {
               </div>
 
               <div className="flex items-center">
-                <label className="flex w-full items-center justify-between gap-4 rounded-lg border border-white/10 bg-beth-night px-4 py-3">
+                <label className="flex w-full items-center justify-between gap-4 rounded-lg border border-accent/20 bg-secondary px-4 py-3">
                   <span>
-                    <span className="block text-sm font-bold text-beth-gold">Estado activo</span>
-                    <span className="text-xs text-beth-ivory/55">{form.activo ? 'Activo' : 'Inactivo'}</span>
+                    <span className="block text-sm font-bold text-primary">Estado activo</span>
+                    <span className="text-xs text-muted">{form.activo ? 'Activo' : 'Inactivo'}</span>
                   </span>
                   <input
                     type="checkbox"
-                    className="h-5 w-5 accent-beth-gold"
+                    className="h-5 w-5 accent-accent"
                     checked={form.activo}
                     onChange={(event) => setForm({ ...form, activo: event.target.checked })}
                   />
@@ -464,7 +464,7 @@ export default function AdminMinisterios() {
               </div>
 
               {formError && (
-                <p className="rounded-md border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-100">
+                <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                   {formError}
                 </p>
               )}
@@ -485,10 +485,10 @@ export default function AdminMinisterios() {
       {toast && (
         <div
           className={[
-            'fixed right-5 top-24 z-[90] max-w-sm rounded-lg border p-4 shadow-glow',
+            'fixed right-5 top-24 z-[90] max-w-sm rounded-lg border p-4 shadow-xl',
             toast.type === 'success'
-              ? 'border-emerald-300/40 bg-emerald-500/15 text-emerald-50'
-              : 'border-red-300/40 bg-red-500/15 text-red-50',
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+              : 'border-red-200 bg-red-50 text-red-800',
           ].join(' ')}
           role="status"
         >

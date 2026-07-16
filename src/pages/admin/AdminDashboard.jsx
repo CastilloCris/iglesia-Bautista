@@ -11,9 +11,13 @@ export default function AdminDashboard() {
     <AdminLayoutNote title="Dashboard">
       <div className="grid gap-6 md:grid-cols-3">
         {cards.map(([title, description]) => (
-          <article key={title} className="surface">
-            <h2 className="text-2xl font-bold text-beth-gold">{title}</h2>
-            <p className="mt-3 text-beth-ivory/75">{description}</p>
+          <article
+            key={title}
+            className="rounded-xl border border-accent/40 bg-white p-6"
+            style={{ boxShadow: '0 2px 12px rgba(184,134,11,0.12), 0 1px 4px rgba(0,0,0,0.06)' }}
+          >
+            <h2 className="text-xl font-bold text-primary">{title}</h2>
+            <p className="mt-3 text-muted text-sm leading-relaxed">{description}</p>
           </article>
         ))}
       </div>
