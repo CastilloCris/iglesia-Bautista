@@ -4,7 +4,7 @@ import { useScrollAnimation, ANIM } from '../hooks/useScrollAnimation.js'
 import usePageMeta from '../hooks/usePageMeta.js'
 
 const meetings = [
-  ['Culto Principal',   'Domingo – 19:30 hs'],
+  ['Culto Principal',   'Domingo – 20:00 hs'],
   ['Culto de Jóvenes',  'Sábados – 19:30 hs'],
   // ['Escuela Bíblica', 'Domingo – 9:00 hs'],
 ]

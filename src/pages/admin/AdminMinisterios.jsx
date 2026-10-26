@@ -107,25 +107,59 @@ export default function AdminMinisterios() {
     return ''
   }
 
+  /**
+   * Redimensiona y comprime una imagen con Canvas antes de subirla.
+   * – Máximo 800 × 800 px (mantiene proporción)
+   * – Salida: WebP, calidad 0.82
+   * – Si el navegador no soporta WebP, cae a JPEG.
+   * Retorna un Blob listo para subir a Supabase Storage.
+   */
+  function comprimirImagen(file, maxPx = 800, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = (ev) => {
+        const img = new Image()
+        img.onload = () => {
+          const ratio = Math.min(maxPx / img.width, maxPx / img.height, 1)
+          const w = Math.round(img.width * ratio)
+          const h = Math.round(img.height * ratio)
+          const canvas = document.createElement('canvas')
+          canvas.width = w
+          canvas.height = h
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, w, h)
+          canvas.toBlob(
+            (blob) => (blob ? resolve(blob) : reject(new Error('Error al comprimir imagen'))),
+            'image/webp',
+            quality,
+          )
+        }
+        img.onerror = () => reject(new Error('No se pudo cargar la imagen'))
+        img.src = ev.target.result
+      }
+      reader.onerror = () => reject(new Error('No se pudo leer el archivo'))
+      reader.readAsDataURL(file)
+    })
+  }
+
   function handleImageChange(event) {
     const file = event.target.files?.[0]
     if (!file) return
 
     if (!file.type.startsWith('image/')) {
-      setFormError('Por favor selecciona un archivo de imagen.')
+      setFormError('Por favor seleccioná un archivo de imagen.')
       return
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setFormError('La imagen no debe superar 5 MB.')
+    if (file.size > 10 * 1024 * 1024) {
+      setFormError('La imagen no debe superar 10 MB.')
       return
     }
 
     setSelectedFile(file)
+    // Preview inmediato con FileReader
     const reader = new FileReader()
-    reader.onload = (e) => {
-      setImagePreview(e.target?.result)
-    }
+    reader.onload = (e) => setImagePreview(e.target?.result)
     reader.readAsDataURL(file)
     setFormError('')
   }
@@ -134,13 +168,15 @@ export default function AdminMinisterios() {
     if (!selectedFile) return form.imagen_url
 
     setUploading(true)
-    const timestamp = Date.now()
-    const fileName = `${timestamp}_${selectedFile.name}`
-
     try {
+      // Comprimir antes de subir
+      const blob = await comprimirImagen(selectedFile)
+      const timestamp = Date.now()
+      const fileName = `${timestamp}_ministerio.webp`
+
       const { error: uploadError } = await supabase.storage
         .from('ministerios-img')
-        .upload(fileName, selectedFile)
+        .upload(fileName, blob, { contentType: 'image/webp', upsert: false })
 
       if (uploadError) throw uploadError
 
@@ -384,7 +420,7 @@ export default function AdminMinisterios() {
               {/* Imagen */}
               <div>
                 <label className="block text-sm font-bold text-primary" htmlFor="imagen">
-                  Imagen
+                  Imagen <span className="ml-1 font-normal text-muted">(se comprime automáticamente a ≤ 800 px · WebP)</span>
                 </label>
                 <div className="mt-3 flex flex-col items-center gap-4">
                   {imagePreview && (
