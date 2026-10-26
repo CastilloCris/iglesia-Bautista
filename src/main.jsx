@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import App from './App.jsx'
 import './styles.css'
 import Home from './pages/Home.jsx'
@@ -13,6 +13,8 @@ import Contact from './pages/Contact.jsx'
 import Blog from './pages/Blog.jsx'
 import BlogPost from './pages/BlogPost.jsx'
 import Library from './pages/Library.jsx'
+import Events from './pages/Events.jsx'
+import NotFound from './pages/NotFound.jsx'
 import Login from './pages/Login.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 import AdminMembers from './pages/admin/AdminMembers.jsx'
@@ -20,6 +22,7 @@ import AdminCelulas from './pages/admin/AdminCelulas.jsx'
 import AdminMinisterios from './pages/admin/AdminMinisterios.jsx'
 import AdminBlog from './pages/admin/AdminBlog.jsx'
 import AdminLibrary from './pages/admin/AdminLibrary.jsx'
+import AdminEventos from './pages/admin/AdminEventos.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -37,6 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/biblioteca" element={<Library />} />
+          <Route path="/eventos" element={<Events />} />
           <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/admin" element={<AdminDashboard />} />
@@ -45,8 +49,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/admin/ministerios" element={<AdminMinisterios />} />
             <Route path="/admin/blog" element={<AdminBlog />} />
             <Route path="/admin/biblioteca" element={<AdminLibrary />} />
+            <Route path="/admin/eventos" element={<AdminEventos />} />
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>

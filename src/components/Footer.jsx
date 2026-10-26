@@ -1,14 +1,13 @@
 // src/components/Footer.jsx
-// Reemplazá tu Footer actual con este archivo completo.
-//
-// CONFIGURACIÓN: editá las URLs de redes sociales abajo.
+// CONFIGURACIÓN: editá las URLs de redes sociales.
 // Si no tienen cuenta en alguna red, poné null y el ícono no aparece.
+
+import { Link } from 'react-router-dom'
 
 const REDES = [
   {
     nombre: 'Facebook',
     url: 'https://facebook.com/iglesiabautistabethel', // ← cambiar URL real
-    color: '#1877F2',
     hover: 'hover:bg-[#1877F2]',
     icono: (
       <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
@@ -19,7 +18,6 @@ const REDES = [
   {
     nombre: 'Instagram',
     url: 'https://instagram.com/iglesiabautistabethel', // ← cambiar URL real
-    color: '#E1306C',
     hover: 'hover:bg-gradient-to-br hover:from-[#833AB4] hover:via-[#E1306C] hover:to-[#F77737]',
     icono: (
       <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
@@ -30,7 +28,6 @@ const REDES = [
   {
     nombre: 'TikTok',
     url: 'https://tiktok.com/@iglesiabautistabethel', // ← cambiar URL real
-    color: '#010101',
     hover: 'hover:bg-[#010101]',
     icono: (
       <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
@@ -41,7 +38,6 @@ const REDES = [
   {
     nombre: 'YouTube',
     url: 'https://youtube.com/@iglesiabautistabethel', // ← cambiar URL real
-    color: '#FF0000',
     hover: 'hover:bg-[#FF0000]',
     icono: (
       <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
@@ -49,59 +45,136 @@ const REDES = [
       </svg>
     ),
   },
-];
+]
+
+const NAV_LINKS = [
+  { to: '/',             label: 'Inicio' },
+  { to: '/quienes-somos', label: 'Quiénes Somos' },
+  { to: '/reuniones',    label: 'Reuniones' },
+  { to: '/ministerios',  label: 'Ministerios' },
+  { to: '/celulas',      label: 'Células' },
+  { to: '/blog',         label: 'Blog' },
+  { to: '/biblioteca',   label: 'Biblioteca' },
+  { to: '/contacto',     label: 'Contacto' },
+]
 
 export default function Footer() {
-  const redesActivas = REDES.filter(r => r.url !== null);
+  const redesActivas = REDES.filter((r) => r.url !== null)
 
   return (
-    <footer className="bg-secondary border-t border-accent/30">
-      {/* Banda superior con redes */}
-      <div className="border-b border-accent/20 py-8">
-        <div className="max-w-4xl mx-auto px-5 flex flex-col items-center gap-4">
-          <p className="text-muted text-xs uppercase tracking-widest font-semibold">
-            Seguinos en redes sociales
-          </p>
+    <footer className="bg-primary text-white/80">
+
+      {/* ——— Cuerpo principal: 3 columnas ——— */}
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+
+        {/* Columna 1 — Iglesia */}
+        <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            {redesActivas.map((red) => (
+            <img
+              src="/logo_iglesia.png"
+              alt="Iglesia Bautista Beth-El"
+              className="h-12 w-auto object-contain brightness-0 invert opacity-90"
+            />
+            <span className="font-serif text-lg text-white leading-tight">
+              Iglesia Bautista<br />Beth-El
+            </span>
+          </div>
+          <p className="text-sm leading-relaxed text-white/65 max-w-xs">
+            Buscamos una relación con Dios basada en la oración, la Biblia y la comunidad.
+            Te esperamos en Wanda, Misiones.
+          </p>
+          <span className="font-serif italic text-accent text-sm">
+            "A la casa de Jehová iremos." — Sal 122:1
+          </span>
+        </div>
+
+        {/* Columna 2 — Links */}
+        <div>
+          <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-accent">
+            Páginas
+          </h4>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
+            {NAV_LINKS.map((link) => (
+              <li key={link.to}>
+                <Link
+                  to={link.to}
+                  className="text-sm text-white/70 transition hover:text-accent"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Columna 3 — Contacto */}
+        <div>
+          <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-accent">
+            Contacto
+          </h4>
+          <ul className="flex flex-col gap-3 text-sm">
+            <li className="flex items-start gap-2 text-white/70">
+              <span className="mt-0.5 flex-shrink-0">📍</span>
+              <span>Wanda, Misiones, Argentina</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-0.5 flex-shrink-0">📱</span>
               <a
-                key={red.nombre}
-                href={red.url}
+                href="https://wa.me/5493757505746"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={red.nombre}
-                title={red.nombre}
-                className={`
-                  w-11 h-11 rounded-full flex items-center justify-center
-                  bg-white text-[#444] border border-accent/30
-                  ${red.hover} hover:text-white hover:border-transparent
-                  shadow-sm hover:shadow-md hover:scale-110
-                  transition-all duration-200
-                `}
+                className="text-white/70 transition hover:text-accent"
               >
-                {red.icono}
+                +54 9 3757 505746
               </a>
-            ))}
-          </div>
+            </li>
+            <li className="flex items-start gap-2 text-white/70">
+              <span className="mt-0.5 flex-shrink-0">🕐</span>
+              <div>
+                <p>Dom – 20:00 hs · Culto Principal</p>
+                <p>Sáb – 19:30 hs · Jóvenes</p>
+              </div>
+            </li>
+          </ul>
+
+          {/* Redes sociales */}
+          {redesActivas.length > 0 && (
+            <div className="mt-6">
+              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">
+                Redes sociales
+              </p>
+              <div className="flex items-center gap-2">
+                {redesActivas.map((red) => (
+                  <a
+                    key={red.nombre}
+                    href={red.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={red.nombre}
+                    title={red.nombre}
+                    className={[
+                      'flex h-9 w-9 items-center justify-center rounded-full',
+                      'bg-white/10 text-white/80 border border-white/15',
+                      red.hover,
+                      'hover:text-white hover:border-transparent',
+                      'shadow-sm hover:shadow-md hover:scale-110 transition-all duration-200',
+                    ].join(' ')}
+                  >
+                    {red.icono}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Banda inferior con copyright */}
-      <div className="py-6 text-center px-5">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <img
-            src="/logo_iglesia.png"
-            alt="Iglesia Bautista Beth-El"
-            className="h-8 w-auto object-contain opacity-70"
-          />
-        </div>
-        <p className="text-muted text-sm">
+      {/* ——— Banda inferior ——— */}
+      <div className="border-t border-white/10 py-5 text-center px-5">
+        <p className="text-xs text-white/40">
           © {new Date().getFullYear()} Iglesia Bautista Beth-El — Wanda, Misiones, Argentina
-        </p>
-        <p className="text-muted/60 text-xs mt-1">
-          Todos los derechos reservados
         </p>
       </div>
     </footer>
-  );
+  )
 }

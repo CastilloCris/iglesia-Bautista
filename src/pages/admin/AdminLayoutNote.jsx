@@ -7,6 +7,7 @@ const adminLinks = [
   { to: '/admin/miembros', label: 'Miembros' },
   { to: '/admin/celulas', label: 'Células' },
   { to: '/admin/ministerios', label: 'Ministerios' },
+  { to: '/admin/eventos', label: 'Eventos' },
   { to: '/admin/blog', label: 'Blog' },
   { to: '/admin/biblioteca', label: 'Biblioteca' },
 ]

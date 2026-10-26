@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase.js'
 import { LIBRARY_TABLE, sanitizeSupabaseOrQuery } from '../lib/library.js'
 import BibliotecaCard from '../components/BibliotecaCard.jsx'
+import SkeletonCard from '../components/SkeletonCard.jsx'
 
 const statusCard = 'rounded-xl border border-accent/40 bg-white p-8 text-center text-muted shadow-sm'
 const errorCard  = 'rounded-xl border border-red-300/50 bg-white p-8 text-center text-red-500 shadow-sm'
@@ -68,7 +69,7 @@ export default function Library() {
             />
           </div>
 
-          {loading && <div className={statusCard}>Cargando biblioteca...</div>}
+          {loading && <SkeletonCard variant="row" count={6} />}
 
           {!loading && error && (
             <div className={errorCard}>No se pudo cargar la biblioteca: {error}</div>

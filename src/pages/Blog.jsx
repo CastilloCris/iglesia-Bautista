@@ -2,9 +2,24 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase.js'
 import { BLOG_TABLE } from '../lib/blog.js'
 import BlogCard from '../components/BlogCard.jsx'
+import SkeletonCard from '../components/SkeletonCard.jsx'
+import { useScrollAnimation, ANIM } from '../hooks/useScrollAnimation.js'
 
 const statusCard = 'rounded-xl border border-accent/40 bg-white p-8 text-center text-muted shadow-sm'
 const errorCard  = 'rounded-xl border border-red-300/50 bg-white p-8 text-center text-red-500 shadow-sm'
+
+function BlogPostCard({ post, index }) {
+  const [ref, visible] = useScrollAnimation(0.1)
+  return (
+    <div
+      ref={ref}
+      className={ANIM.fadeUp(visible)}
+      style={{ transitionDelay: `${index * 80}ms` }}
+    >
+      <BlogCard post={post} />
+    </div>
+  )
+}
 
 export default function Blog() {
   const [posts, setPosts] = useState([])
@@ -39,7 +54,7 @@ export default function Blog() {
 
       <div className="min-h-screen bg-secondary">
         <section className="container-page section-pad">
-          {loading && <div className={statusCard}>Cargando entradas...</div>}
+          {loading && <SkeletonCard variant="row" count={3} />}
 
           {!loading && error && (
             <div className={errorCard}>No se pudieron cargar las entradas: {error}</div>
@@ -51,8 +66,8 @@ export default function Blog() {
 
           {!loading && !error && posts.length > 0 && (
             <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post) => (
-                <BlogCard key={post.id} post={post} />
+              {posts.map((post, i) => (
+                <BlogPostCard key={post.id} post={post} index={i} />
               ))}
             </div>
           )}
